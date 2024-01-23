@@ -1,0 +1,5 @@
+go get github.com/joho/godotenv
+go get github.com/labstack/echo/v4
+go get gorm.io/gorm
+go get gorm.io/driver/mysql
+go get gorm.io/driver/postgres
