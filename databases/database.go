@@ -18,7 +18,7 @@ func Connect() (*gorm.DB, error) {
 	}
 
 	if config().Driver == "postgres" {
-		dsn = "user=" + config().User + " password=" + config().Password + " dbname=" + config().Db_name + " sslmode=disable"
+		dsn = "host=" + config().Host + " port=" + config().Port + " user=" + config().User + " password=" + config().Password + " dbname=" + config().Db_name + " sslmode=disable"
 
 		return gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	}

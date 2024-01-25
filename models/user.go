@@ -24,12 +24,46 @@ func (userModel UserModel) FindAll() ([]entities.User, error) {
 
 }
 
-func (userModel UserModel) FindById(id int64) entities.User {
+func (userModel UserModel) FindById(id int64) (entities.User, error) {
 	db := userModel.Db
 
 	var user entities.User
 
 	db.Where("id = ?", id).First(&user)
 
-	return user
+	return user, nil
+}
+
+func (userModel UserModel) InsertUser(user entities.User) (int, error) {
+	db := userModel.Db
+	result := db.Create(&user)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
+	return int(user.ID), nil
+}
+
+func (userModel UserModel) UpdateUser(user entities.User, id int64) (int, error) {
+	db := userModel.Db
+
+	existingUser, err := userModel.FindById(id)
+	if err != nil {
+		return 0, err
+	}
+
+	existingUser.Name = user.Name
+	existingUser.Email = user.Email
+	existingUser.Password = user.Password
+	existingUser.UpdatedAt = user.UpdatedAt
+
+	result := db.Save(&existingUser)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return int(result.RowsAffected), nil
+}
+
+func (userModel UserModel) DeleteUser(id int64) (int, error) {
+	return 1, nil
 }
